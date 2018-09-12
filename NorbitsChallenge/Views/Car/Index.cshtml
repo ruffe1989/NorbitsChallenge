@@ -1,0 +1,97 @@
+﻿@model CarViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2 class="text-center">Oversikt over biler:</h2>
+
+<h3>Søk etter info om bil:</h3>
+
+<form asp-action="ShowSingelCar" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSuccess">
+    <input type="text" name="licensePlate" placeholder="Skriv inn reg. nr" />
+    <input type="submit" value="Søk" />
+</form>
+
+
+    <table class="table hidden table table-striped table-bordered" id="carInfo">
+        <thead>
+            <tr>
+                <th scope="col">Reg. nr:</th>
+                <th scope="col">Beskrivelse:</th>
+                <th scope="col">Modell:</th>
+                <th scope="col">Merke:</th>
+                <th scope="col">Antall dekk:</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <th scope="row"><div id="licensePlate"></div></th>
+                    <td><div id="description"></div></td>
+                    <td><div id="model"></div></td>
+                    <td><div id="brand"></div></td>
+                    <td><div id="tireCount"></div></td>
+                </tr>
+
+          
+        </tbody>
+    </table>
+<hr/>
+<h3>Oversikt over alle biler registert på verkstedet:</h3>
+<form asp-action="Index">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Reg. nr:</th>
+                <th scope="col">Beskrivelse:</th>
+                <th scope="col">Modell:</th>
+                <th scope="col">Merke:</th>
+                <th scope="col">Antall dekk:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model.Cars)
+            {
+                <tr>
+                    <th scope="row">@car.LicensePlate</th>
+                    <td>@car.Description</td>
+                    <td>@car.Model</td>
+                    <td>@car.Brand</td>
+                    <td>@car.TireCount</td>
+                    <td>@Html.ActionLink("Slett", "DeleteCar",
+                       new { id = @car.LicensePlate }, 
+                       new {onclick= "return confirm('Er du sikker på at du vil slette?');"})</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</form>
+
+<h3>Slett en bil i databasen:</h3>
+<form asp-action="DeleteCar" data-ajax="true" data-ajax-method="POST" data-ajax-success="deleteCar">
+    <input type="text" name="licensePlate" placeholder="Skriv inn reg. nr" />
+    <input type="submit" value="Slett bil" />
+
+</form>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        function onSuccess(data) {
+            var licensePlate = data[0].licensePlate;
+            var description = data[1];
+            var model = data[2];
+            var brand = data[3];
+            var tireCount = data[4];
+            console.log(licensePlate)
+            $('#licensePlate').text(licensePlate);
+            $('#description').text(description);
+            $('#model').text(model);
+            $('#brand').text(brand);
+            $('#tireCount').text(tireCount);
+            $('#carInfo').removeClass('hidden');
+            
+        }
+    </script>
+}

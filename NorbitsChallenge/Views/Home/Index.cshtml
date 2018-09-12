@@ -1,0 +1,18 @@
+﻿@model HomeModel
+
+@{
+
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<h2 class="text-center">
+    Velkommen @Model.CompanyName til NorbitsChallenge biloversikt
+</h2>
+
+<hr />
+<h4 class="text-center">Gå til <a asp-action="Index" asp-controller="Car">Bil oversikt</a></h4>
+    
+<hr/>
+<h4 class="text-center">Gå til <a asp-action="Index" asp-controller="Settings" asp-route-companyId="@Model.CompanyId">Innstillinger</a></h4>
